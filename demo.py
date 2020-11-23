@@ -13,7 +13,7 @@ api = tweepy.API(auth)
 
 file_test = open("test.txt", "w", encoding="utf8" )
 
-for tweet in tweepy.Cursor(api.search, q="bún chả", result_type="recent", lang="vi", tweet_mode='extended').items(100):
+for tweet in tweepy.Cursor(api.search, q="bún chả",count=100, result_type="recent", lang="vi", tweet_mode='extended').items():
     file_test.write(tweet.full_text)
 
 file_test.close()
@@ -92,61 +92,63 @@ with open("test.txt", "r", encoding="utf8") as file_test:
 
 
 ###################################### Test
-#for x in range(len(list_test)):
+for x in range(len(list_test)):
 	# lt = list_test[x]
 
-
-
-lt = list_test[0]
-
-list_word_test = lt.split()
-num_word_test = len(list_word_test)
-f_test = []
-
-
-ift = 0;
-while ift < count_word:
-	f_test.append(0)
-	ift += 1
-
-
-for num in range(count_word):
-	for i in range(0, num_word_test	 - 1):
-		if(list_word[num] == list_word_test[i]):
-			f_test[num] = f_test[num] + 1;
-
-
-
-lt_ns = num_train_non_spam/(num_train_non_spam + num_train_spam)
-lt_s  = num_train_spam/(num_train_non_spam + num_train_spam)
-
-
-for num in range(count_word):
-	if(f_test[num] == 0):
+	lt = list_test[x]
+	if lt == "\n" or lt == "":
 		continue
-	elif f_test[num] > 0:
-		tsns = f_non_spam[num] + 1
-		ms = num_word_non_spam + count_word
-		lt_ns *= pow((tsns/ms),f_test[num])
-
-		tss = f_spam[num] + 1
-		lt_s *= pow((tss/ms), f_test[num])
-	
-
-P_non_spam = (lt_ns)/(lt_ns + lt_s)
-P_spam = (lt_s)/(lt_ns + lt_s)
-
-print("tweets: " + lt)
-print("non spam: ")
-print(P_non_spam)
-print("spam: ")
-print(P_spam)
-
-if P_non_spam >= P_spam:
-	print("===> Non Spam")
-elif P_non_spam < P_spam:
-	print("===> Spam")
+	list_word_test = lt.split()
+	num_word_test = len(list_word_test)
+	f_test = []
 
 
+	ift = 0;
+	while ift < count_word:
+		f_test.append(0)
+		ift += 1
+
+
+	for num in range(count_word):
+		for i in range(0, num_word_test	 - 1):
+			if(list_word[num] == list_word_test[i]):
+				f_test[num] = f_test[num] + 1;
+
+
+
+	lt_ns = num_train_non_spam/(num_train_non_spam + num_train_spam)
+	lt_s  = num_train_spam/(num_train_non_spam + num_train_spam)
+
+
+	for num in range(count_word):
+		if(f_test[num] == 0):
+			continue
+		elif f_test[num] > 0:
+			tsns = f_non_spam[num] + 1
+			ms = num_word_non_spam + count_word
+			lt_ns *= pow((tsns/ms),f_test[num])
+
+			tss = f_spam[num] + 1
+			lt_s *= pow((tss/ms), f_test[num])
+		
+
+	P_non_spam = (lt_ns)/(lt_ns + lt_s)
+	P_spam = (lt_s)/(lt_ns + lt_s)
+
+	print("tweets: " + lt)
+	print("non spam: ")
+	print(P_non_spam)
+	print("spam: ")
+	print(P_spam)
+
+	if P_non_spam >= P_spam:
+		print("===> Non Spam")
+	elif P_non_spam < P_spam:
+		print("===> Spam")
+
+	print("------------------------------------------------------")
+
+
+print("end")
 
 
